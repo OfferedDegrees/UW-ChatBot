@@ -35,22 +35,22 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
 
-    # Build the project using Gradle Wrapper
+    # Build the project using Gradle Wrapper from Backend directory
     - name: Build with Gradle Wrapper
       run: ./gradlew build
-      working-directory: Backend  # Specify Backend directory for Gradle build
+      working-directory: UW-ChatBot/UW-ChatBot/Backend  # Correct the directory to Backend under UW-ChatBot
 
     # Run the JUnit tests
     - name: Run Tests
       run: ./gradlew test
-      working-directory: Backend  # Specify Backend directory for tests
+      working-directory: UW-ChatBot/UW-ChatBot/Backend  # Correct the directory to Backend under UW-ChatBot
 
-    # Upload test results (optional)
+    # Upload test results (optional but helpful)
     - name: Upload JUnit Test Results
       uses: actions/upload-artifact@v3
       with:
         name: junit-results
-        path: Backend/build/test-results/test/*.xml
+        path: UW-ChatBot/UW-ChatBot/Backend/build/test-results/test/*.xml
 
   dependency-submission:
     runs-on: ubuntu-latest
@@ -69,9 +69,8 @@ jobs:
         distribution: 'temurin'
 
     # Generate and submit the dependency graph
-    # Note: Dependency submission requires the project path to be handled within the action
     - name: Generate and submit dependency graph
       uses: gradle/actions/dependency-submission@v4.0.0
       with:
-        gradle-version: '7.6'         # Specify the gradle version
-        root-directory: Backend       # Specify the root directory where the build.gradle is located
+        gradle-version: '7.6'           # Specify the gradle version
+        root-directory: UW-ChatBot/UW-ChatBot/Backend # Correct the path to Backend under UW-ChatBot
