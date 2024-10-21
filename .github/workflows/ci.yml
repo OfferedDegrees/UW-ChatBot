@@ -1,5 +1,6 @@
 name: Java CI with Gradle
 
+# Triggers the workflow on push or pull request to the main branch
 on:
   push:
     branches: [ "main" ]
@@ -13,41 +14,36 @@ jobs:
       contents: read
 
     steps:
+    # Check out the repository
     - uses: actions/checkout@v4
 
+    # Set up JDK 17 for Java
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
 
-    # Debugging step: List directories
-    - name: List directory for debugging
-      run: ls -R
-
-    - name: Cache Gradle dependencies
-      uses: actions/cache@v3
+    # Set up Gradle and cache dependencies
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4.0.0
       with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
+        gradle-version: 7.6
 
+    # Build the project using Gradle
     - name: Build with Gradle Wrapper
       run: ./gradlew build
-      working-directory: UW-ChatBot/UW-ChatBot/Backend
 
+    # Run the JUnit tests
     - name: Run Tests
       run: ./gradlew test
-      working-directory: UW-ChatBot/UW-ChatBot/Backend
 
+    # Upload test results (optional but helpful)
     - name: Upload JUnit Test Results
       uses: actions/upload-artifact@v3
       with:
         name: junit-results
-        path: UW-ChatBot/UW-ChatBot/Backend/build/test-results/test/*.xml
+        path: build/test-results/test/*.xml
 
   dependency-submission:
     runs-on: ubuntu-latest
@@ -56,15 +52,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
 
+    # Submits a dependency graph for security alerts (optional)
     - name: Generate and submit dependency graph
       uses: gradle/actions/dependency-submission@v4.0.0
-      with:
-        gradle-version: '7.6'
-        root-directory: UW-ChatBot/UW-ChatBot/Backend
