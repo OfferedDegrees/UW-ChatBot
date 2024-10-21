@@ -18,8 +18,17 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
+	// Spring Boot starter for web applications (required for REST controllers)
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// JUnit 5 and Spring Boot testing dependencies
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// JUnit 5 dependencies
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+
+	// Required for running JUnit 5 tests
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
