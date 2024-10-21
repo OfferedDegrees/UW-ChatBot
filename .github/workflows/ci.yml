@@ -24,7 +24,7 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    # Set up Gradle and cache dependencies
+    # Cache Gradle dependencies
     - name: Cache Gradle dependencies
       uses: actions/cache@v3
       with:
@@ -38,17 +38,19 @@ jobs:
     # Build the project using Gradle Wrapper
     - name: Build with Gradle Wrapper
       run: ./gradlew build
+      working-directory: Backend  # Specify Backend directory for Gradle build
 
     # Run the JUnit tests
     - name: Run Tests
       run: ./gradlew test
+      working-directory: Backend  # Specify Backend directory for tests
 
-    # Upload test results (optional but helpful)
+    # Upload test results (optional)
     - name: Upload JUnit Test Results
       uses: actions/upload-artifact@v3
       with:
         name: junit-results
-        path: build/test-results/test/*.xml
+        path: Backend/build/test-results/test/*.xml
 
   dependency-submission:
     runs-on: ubuntu-latest
@@ -66,6 +68,10 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    # Submits a dependency graph for security alerts (optional)
+    # Generate and submit the dependency graph
+    # Note: Dependency submission requires the project path to be handled within the action
     - name: Generate and submit dependency graph
       uses: gradle/actions/dependency-submission@v4.0.0
+      with:
+        gradle-version: '7.6'         # Specify the gradle version
+        root-directory: Backend       # Specify the root directory where the build.gradle is located
