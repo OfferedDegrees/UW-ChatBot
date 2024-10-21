@@ -1,6 +1,5 @@
 name: Java CI with Gradle
 
-# Triggers the workflow on push or pull request to the main branch
 on:
   push:
     branches: [ "main" ]
@@ -14,17 +13,18 @@ jobs:
       contents: read
 
     steps:
-    # Check out the repository
     - uses: actions/checkout@v4
 
-    # Set up JDK 17 for Java
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
 
-    # Cache Gradle dependencies
+    # Debugging step: List directories
+    - name: List directory for debugging
+      run: ls -R
+
     - name: Cache Gradle dependencies
       uses: actions/cache@v3
       with:
@@ -35,17 +35,14 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
 
-    # Build the project using Gradle Wrapper from Backend directory
     - name: Build with Gradle Wrapper
       run: ./gradlew build
-      working-directory: UW-ChatBot/UW-ChatBot/Backend  # Correct the directory to Backend under UW-ChatBot
+      working-directory: UW-ChatBot/UW-ChatBot/Backend
 
-    # Run the JUnit tests
     - name: Run Tests
       run: ./gradlew test
-      working-directory: UW-ChatBot/UW-ChatBot/Backend  # Correct the directory to Backend under UW-ChatBot
+      working-directory: UW-ChatBot/UW-ChatBot/Backend
 
-    # Upload test results (optional but helpful)
     - name: Upload JUnit Test Results
       uses: actions/upload-artifact@v3
       with:
@@ -58,19 +55,16 @@ jobs:
       contents: write
 
     steps:
-    # Check out the repository for dependency submission
     - uses: actions/checkout@v4
 
-    # Set up JDK 17
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
 
-    # Generate and submit the dependency graph
     - name: Generate and submit dependency graph
       uses: gradle/actions/dependency-submission@v4.0.0
       with:
-        gradle-version: '7.6'           # Specify the gradle version
-        root-directory: UW-ChatBot/UW-ChatBot/Backend # Correct the path to Backend under UW-ChatBot
+        gradle-version: '7.6'
+        root-directory: UW-ChatBot/UW-ChatBot/Backend
