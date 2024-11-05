@@ -4,7 +4,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 # Installations Before Running Everything
-Install [Node.js] (https://nodejs.org/en)
+Install [Node.js](https://nodejs.org/en)
 
 Open terminal and run:
 
