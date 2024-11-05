@@ -4,16 +4,17 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 # Installations Before Running Everything
-Install Node.js [https://nodejs.org/en]
+Install [Node.js] (https://nodejs.org/en)
 
 Open terminal and run:
-node -v
-npm -v
+```node -v```
+```npm -v```
 
-Setup the API Key (kind of broken right now and the key is hardcoded right now in the Chatbot.tsx file)
-- go to your ./frontend/src/ directory and create a .env file.
-- add your OpenAI API key to the .env file:
-REACT_APP_OPENAI_API_KEY=your_api_key
+Setup the API Key (kind of broken right now and the key is hardcoded right now in the `Chatbot.tsx` file)
+- go to your `./frontend/src/ directory` and create a `.env` file.
+- add your OpenAI API key to the `.env` file:
+
+```REACT_APP_OPENAI_API_KEY=your_api_key```
 
 ## Available Scripts
 
@@ -21,7 +22,7 @@ REACT_APP_OPENAI_API_KEY=your_api_key
 In the project directory, you can run:
 
 
-### `npm start`
+```npm start```
 
 
 Runs the app in the development mode.\
@@ -32,14 +33,14 @@ The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
 
-### `npm test`
+``npm test```
 
 
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 
-### `npm run build`
+```npm run build```
 
 
 Builds the app for production to the `build` folder.\
@@ -53,7 +54,7 @@ Your app is ready to be deployed!
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 
-### `npm run eject`
+```npm run eject```
 
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
@@ -69,36 +70,39 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 # How to obtain the source code
 To obtain the source code, run this command in the directory of your choice:
-git clone https://github.com/RyanLe101/UW-ChatBot.git
-cd UW-Chatbot
+
+```git clone https://github.com/RyanLe101/UW-ChatBot.git```
+
+```cd UW-Chatbot```
 
 # The layout of your directory structure
 The layout of the directory is in the src:
-- frontend/src/__test__: Contains the test files.
-- src: Contains the frontend code, including .tsx files for rendering the components and .css files for customizing the website's styling after rendering.
+- `frontend/src/__test__`: Contains the test files.
+- `src`: Contains the frontend code, including `.tsx` files for rendering the components and `.css` files for customizing the website's styling after rendering.
 
 # How to build the software
 To build the software, run this command in the terminal:
-npm run build
+
+```npm run build```
 
 This will output to the build directory.
 
 # How to test the software
-- Test files are located in the ./frontend/src/__tests__ directory.
+- Test files are located in the `./frontend/src/__tests__` directory.
 
-- Each test file should be named with the .test.tsx extension/ ending.
-- Example: [componentName].test.tsx
+- Each test file should be named with the `.test.tsx` extension/ ending.
+- Example: `[componentName].test.tsx`
 
 - The names of the tests should describe what is being tested
 
 - To test the software, run this command in the terminal:
-npm test
+```npm test```
 
 # How to build a release of the software
 - To build a release of the software:
-npm run build
+```npm run build```
 
-This will output to the buid directory
+This will output to the `build` directory
 
 ## Learn More
 
