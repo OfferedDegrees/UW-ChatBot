@@ -46,7 +46,3 @@ Use this command to verify that the backend services are functioning as expected
 
 Builds the backend for production.  
 This command compiles the code, packages dependencies, and prepares the application for deployment.
-```
-
-Feel free to modify this template as needed to align with any additional configurations or commands.
-```
