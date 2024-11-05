@@ -25,24 +25,3 @@ To report a bug, please visit the [UW-ChatBot Issue Tracker](https://github.com/
 6. **Screenshots**: Attach screenshots or videos if applicable, as they help visualize the issue.
 
 For more detailed guidance on writing a good bug report, please refer to the [Mozilla Bug Writing Guidelines](https://developer.mozilla.org/en-US/docs/Mozilla/QA/Bug_writing_guidelines).
-
-## How to Report a Bug
-
-To report a bug, please visit the [UW-ChatBot Issue Tracker](https://github.com/RyanLe101/UW-ChatBot/issues). When reporting a bug, follow the guidelines below to help us identify and address the issue efficiently:
-
-1. **Title**: Provide a brief, descriptive title for the bug.
-2. **Description**: Explain the issue, including any error messages, unexpected behaviors, or steps that led to the bug.
-3. **Steps to Reproduce**: Detail the actions you took leading up to the issue, so our team can replicate it. Be as specific as possible.
-4. **Expected and Actual Results**: Describe what you expected to happen and what actually occurred.
-5. **Environment Details**: Include relevant details such as your browser, OS, device, and any other context that might help with troubleshooting.
-6. **Screenshots**: Attach screenshots or videos if applicable, as they help visualize the issue.
-
-For more detailed guidance on writing a good bug report, please refer to the [Mozilla Bug Writing Guidelines](https://developer.mozilla.org/en-US/docs/Mozilla/QA/Bug_writing_guidelines).
-
-## Known Bugs and Limitations
-
-Known bugs or limitations are documented in the [UW-ChatBot Bug Tracker](https://github.com/RyanLe101/UW-ChatBot/issues). Please review this list to see if the issue you encountered has already been reported. Our goal is to ensure a smooth user experience, so any trivial or recurring bugs are promptly addressed. If your issue is not listed, feel free to submit a new bug report following the guidelines above.
-
----
-
-For any additional help or questions, refer to the project documentation or contact us through our issue tracker.
