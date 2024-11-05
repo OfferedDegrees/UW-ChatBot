@@ -2,6 +2,18 @@
 
 The UW ChatBot backend service is built with Java and Spring Boot. It handles user queries, data retrieval, and integrates with MongoDB, with optional support for AWS services.
 
+## Directory Layout
+
+- **Backend/**: Main backend service code.
+  - **controllers/**: Handles HTTP requests and defines API endpoints.
+  - **services/**: Contains business logic and interacts with repositories.
+  - **repositories/**: Manages data access and integrates with MongoDB.
+  - **models/**: Defines data models and entities.
+  - **test/**: Includes test cases for different components.
+    - **unit/**: Unit tests for individual functions and classes.
+    - **integration/**: Integration tests for verifying components work together.
+
+
 ## Configuration
 
 Before running the backend, create a `.env` file in the `Backend` directory with the following configuration:
