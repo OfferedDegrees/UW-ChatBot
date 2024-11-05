@@ -8,15 +8,21 @@ Install [Node.js] (https://nodejs.org/en)
 
 Open terminal and run:
 
-```node -v```
+```bash
+node -v
+```
 
-```npm -v```
+```bash
+npm -v
+```
 
 Setup the API Key (kind of broken right now and the key is hardcoded right now in the `Chatbot.tsx` file)
 - go to your `./frontend/src/ directory` and create a `.env` file.
 - add your OpenAI API key to the `.env` file:
 
-```REACT_APP_OPENAI_API_KEY=your_api_key```
+```bash
+REACT_APP_OPENAI_API_KEY=your_api_key
+```
 
 ## Available Scripts
 
@@ -24,7 +30,9 @@ Setup the API Key (kind of broken right now and the key is hardcoded right now i
 In the project directory, you can run:
 
 
-```npm start```
+```bash
+npm start
+```
 
 
 Runs the app in the development mode.\
@@ -35,14 +43,18 @@ The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
 
-``npm test```
+```bash
+npm test
+```
 
 
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 
-```npm run build```
+```bash
+npm run build
+```
 
 
 Builds the app for production to the `build` folder.\
@@ -56,7 +68,9 @@ Your app is ready to be deployed!
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 
-```npm run eject```
+```bash
+npm run eject
+```
 
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
@@ -73,9 +87,13 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 # How to obtain the source code
 To obtain the source code, run this command in the directory of your choice:
 
-```git clone https://github.com/RyanLe101/UW-ChatBot.git```
+```bash
+git clone https://github.com/RyanLe101/UW-ChatBot.git
+```
 
-```cd UW-Chatbot```
+```bash
+cd UW-Chatbot
+```
 
 # The layout of your directory structure
 The layout of the directory is in the src:
@@ -85,7 +103,9 @@ The layout of the directory is in the src:
 # How to build the software
 To build the software, run this command in the terminal:
 
-```npm run build```
+```bash
+npm run build
+```
 
 This will output to the build directory.
 
@@ -98,11 +118,15 @@ This will output to the build directory.
 - The names of the tests should describe what is being tested
 
 - To test the software, run this command in the terminal:
-```npm test```
+```bash
+npm test
+```
 
 # How to build a release of the software
 - To build a release of the software:
-```npm run build```
+```bash
+npm run build
+```
 
 This will output to the `build` directory
 
