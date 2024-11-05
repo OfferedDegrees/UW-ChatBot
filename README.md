@@ -25,3 +25,7 @@ To report a bug, please visit the [UW-ChatBot Issue Tracker](https://github.com/
 6. **Screenshots**: Attach screenshots or videos if applicable, as they help visualize the issue.
 
 For more detailed guidance on writing a good bug report, please refer to the [Mozilla Bug Writing Guidelines](https://developer.mozilla.org/en-US/docs/Mozilla/QA/Bug_writing_guidelines).
+
+---
+
+For any additional help or questions, refer to the project documentation or contact us through our issue tracker.
