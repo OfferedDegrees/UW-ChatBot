@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Chatbot.css';
-import logo from './uw chatbot logo.png';
+import logo from './uwchatbotlogo.png';
 
 const Chatbot = () => {
   const [question, setQuestion] = useState('');
   const [conversation, setConversation] = useState<{ sender: 'bot' | 'user'; text: string }[]>([]);  // Chat history
   const [loading, setLoading] = useState(false); // New loading state
   const [feedback, setFeedback] = useState(0); // New feedback state
-  const apiKey = 'insert_api_key'; // Replace with OpenAI API key
+  // const apiKey = 'insert_api_key'; // Replace with OpenAI API key
+  const apiKey = process.env.REACT_APP_OPENAI_API_KEY; // Use environment variable
 
   const chatEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -22,7 +23,15 @@ const Chatbot = () => {
 
   // Auto scroll to the bottom of the chat
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const scrollToBottom = () => {
+      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    // Delay scrolling a bit to ensure the new message is rendered first
+    const timeout = setTimeout(scrollToBottom, 100);
+
+    return () => clearTimeout(timeout); // Cleanup timeout when component is unmounted
   }, [conversation]);
 
   const handleQuestionSubmit = async (e: React.FormEvent) => {
@@ -73,7 +82,7 @@ const Chatbot = () => {
             const data = msg.replace('data: ', '');
             try {
               const json = JSON.parse(data);
-              if (json.choices && json.choices[0].delta) {
+              if (json.choices && json.choices[0].delta && json.choices[0].delta.content) { 
                 const content = json.choices[0].delta.content;
                 botMessage += content; // Append new content
                 // Update conversation with the latest bot message

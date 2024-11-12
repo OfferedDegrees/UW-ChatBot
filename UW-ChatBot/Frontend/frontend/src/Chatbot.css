@@ -1,14 +1,27 @@
+/* Make the chatbot container fill the entire screen */
 .chatbot-container {
-  width: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full height of the viewport */
+  width: 100%; /* Full width of the viewport */
   background-color: #f9f9f9;
   font-family: Arial, sans-serif;
+  position: relative;
 }
 
+/* Chat Header Styling */
 .chat-header {
+  display: flex;
+  align-items: center;
   background-color: #4b2e83;
   color: white;
   padding: 15px;
-  text-align: center;
+}
+
+.chat-logo {
+  width: 40px; /* Adjust the logo size */
+  height: 40px;
+  margin-right: 10px;
 }
 
 .chat-header h1 {
@@ -16,31 +29,28 @@
   font-size: 22px;
 }
 
+/* Chat Body should fill the remaining screen space */
 .chat-body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Take up all remaining vertical space */
   padding: 20px;
+  overflow: hidden; /* Prevent overflow */
 }
 
-.bot-message {
-  background-color: #ececec;
-  padding: 10px;
-  border-radius: 12px;
-  margin-bottom: 10px;
-  width: fit-content;
-}
-
-.bot-message p {
-  margin: 0;
-  color: #333;
-}
-
-/* Chat history styling */
+/* Chat history should scroll but take up all the available space */
 .chat-history {
-  margin-top: 15px;
-  max-height: 200px;
-  overflow-y: auto;
+  flex-grow: 1; /* Takes up all available space in chat-body */
+  overflow-y: auto; /* Allow scrolling when necessary */
+  margin-bottom: 20px;
   padding: 10px 0;
 }
 
+.chat-history::-webkit-scrollbar {
+  width: 0; /* Hide the scrollbar */
+}
+
+/* Message box styling */
 .message {
   margin-bottom: 10px;
   padding: 10px;
@@ -50,7 +60,7 @@
 }
 
 .message.user {
-  background-color: #d1e7ff;
+  background-color: #d6d1ff;
   margin-left: auto;
   text-align: right;
 }
@@ -59,10 +69,13 @@
   background-color: #ececec;
 }
 
+/* Input form and button at the bottom */
 .chat-form {
   display: flex;
   align-items: center;
-  margin-top: 15px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
 }
 
 .chat-form input {
@@ -84,10 +97,13 @@
   font-size: 18px;
 }
 
+/* Suggested questions section */
 .suggested-questions {
-  margin-top: 15px;
   display: flex;
-  justify-content: space-around;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .suggested-questions button {
@@ -101,25 +117,4 @@
 
 .suggested-questions button:hover {
   background-color: #ddd;
-}
-
-/* Feedback section */
-.feedback-section {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.stars {
-  display: flex;
-  justify-content: center;
-}
-
-.star {
-  font-size: 28px;
-  cursor: pointer;
-  padding: 0 5px;
-}
-
-.star.selected {
-  color: gold;
 }
