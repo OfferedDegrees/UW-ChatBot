@@ -23,7 +23,7 @@ def is_allowed(url):
             return False
     return True
 
-with open("webscraper_data.txt", "w") as file:
+with open("webscraper_data.csv", "w") as file:
     for link in links:
         url = urljoin(start_url, link['href'])
         if is_allowed(url):
