@@ -29,9 +29,13 @@ REACT_APP_OPENAI_API_KEY=your_api_key
 
 In the project directory, you can run:
 
+```bash
+npm install
+```
+
 
 ```bash
-npm start
+npm run start
 ```
 
 
