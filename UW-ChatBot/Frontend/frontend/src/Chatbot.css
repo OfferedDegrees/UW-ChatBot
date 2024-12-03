@@ -27,6 +27,7 @@
 .chat-header h1 {
   margin: 0;
   font-size: 22px;
+  font-weight: bold;
 }
 
 /* Chat Body should fill the remaining screen space */
@@ -36,6 +37,7 @@
   flex-grow: 1; /* Take up all remaining vertical space */
   padding: 20px;
   overflow: hidden; /* Prevent overflow */
+  position: relative;
 }
 
 /* Chat history should scroll but take up all the available space */
@@ -67,6 +69,7 @@
 
 .message.bot {
   background-color: #ececec;
+  text-align: left;
 }
 
 /* Input form and button at the bottom */
@@ -85,16 +88,36 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   margin-right: 10px;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+.chat-form input:focus {
+  outline: none;
+  border-color: #4b2e83;
 }
 
 .chat-form button {
   background-color: #4b2e83;
   color: white;
-  padding: 10px;
+  padding: 12px 20px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 18px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin: 1px;
+}
+
+.chat-form button:hover {
+  background-color: #3e1f61;
+  transform: translateY(-2px); /* Slight lift on hover */
+}
+
+.chat-form button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none; /* Prevent lift on disabled button */
 }
 
 /* Suggested questions section */
@@ -102,19 +125,49 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
-  margin-top: 10px;
+  gap: 15px;
+  margin-top: 20px;
 }
 
 .suggested-questions button {
   background-color: #f0f0f0;
-  padding: 8px 12px;
+  padding: 10px 15px;
   border-radius: 8px;
   border: none;
   cursor: pointer;
   font-size: 14px;
+  min-width: 150px; /* Make buttons have a consistent width */
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .suggested-questions button:hover {
   background-color: #ddd;
+  transform: translateY(-2px); /* Slight lift on hover */
+}
+
+.suggested-questions button:active {
+  background-color: #ccc;
+  transform: translateY(0); /* Button sinks on click */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .chat-header h1 {
+    font-size: 18px;
+  }
+
+  .chat-form input {
+    font-size: 14px;
+  }
+
+  .chat-form button {
+    font-size: 16px;
+    padding: 10px 15px;
+  }
+
+  .suggested-questions button {
+    font-size: 12px;
+    min-width: 120px; /* Make buttons smaller on mobile */
+  }
 }

@@ -1,49 +1,71 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Chatbot.css';
-import logo from './uwchatbotlogo.png';
+import logo from './photos/uwchatbotlogo.png';
+import axios from 'axios';
+
+type Message = {
+  sender: "bot" | "user";
+  text: string;
+};
 
 const Chatbot = () => {
   const [question, setQuestion] = useState('');
-  const [conversation, setConversation] = useState<{ sender: 'bot' | 'user'; text: string }[]>([]);  // Chat history
-  const [loading, setLoading] = useState(false); // New loading state
-  const [feedback, setFeedback] = useState(0); // New feedback state
-  // const apiKey = 'insert_api_key'; // Replace with OpenAI API key
-  const apiKey = process.env.REACT_APP_OPENAI_API_KEY; // Use environment variable
+  const [conversation, setConversation] = useState<Message[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [useChatGPT, setUseChatGPT] = useState(true);
+  const [hardcodedStep, setHardcodedStep] = useState(0); // Track the step of the conversation
+  const [credits, setCredits] = useState(0); // Store the number of credits
+  const [isResident, setIsResident] = useState(false); // Store if the student is an in-state resident
+  // aws
+  const [inputText, setInputText] = useState('');
+  const [responseText, setResponseText] = useState('');
+  const [suggestions] = useState([
+    "What are the tuition fees?",
+    "How many credits do I need?",
+    "What is the GPA requirement?",
+    "Tell me about UW campus life.",
+  ]);
 
   const chatEndRef = useRef<HTMLDivElement | null>(null);
+  const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
 
-  // Add initial bot message
   useEffect(() => {
-    const initialBotMessage = {
-      sender: 'bot' as const,
-      text: 'Woof woof! 🐾 I know all about UW',
-    };
-    setConversation([initialBotMessage]);
+    setConversation([{ sender: 'bot', text: 'Woof woof! 🐾 I know all about UW' }]);
   }, []);
 
-  // Auto scroll to the bottom of the chat
   useEffect(() => {
-    // chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    const scrollToBottom = () => {
-      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
-
-    // Delay scrolling a bit to ensure the new message is rendered first
-    const timeout = setTimeout(scrollToBottom, 100);
-
-    return () => clearTimeout(timeout); // Cleanup timeout when component is unmounted
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [conversation]);
 
   const handleQuestionSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (question.trim() === '' || loading) return; // Prevent submission if loading
+    if (question.trim() === '' || loading) return;
 
-    const userMessage = { sender: 'user' as const, text: question };
+    const userMessage: Message = { sender: 'user', text: question };
     setConversation((prev) => [...prev, userMessage]);
-    setLoading(true); // Set loading state to true
+    setLoading(true);
 
+    if (useChatGPT) {
+      await fetchChatGPTResponse(question);
+    } else {
+      await handleHardcodedResponse(question);
+    }
+
+    setQuestion('');
+  };
+
+  const fetchAWSResponse = async () => {
+    try {
+      const res = await axios.post('http://localhost:5000/generate-response', { inputText });
+      setResponseText(res.data.response);
+    } catch (error) {
+      console.error('Error fetching response:', error);
+    }
+  };
+
+  const fetchChatGPTResponse = async (question: string) => {
     let botMessage = '';
-    setConversation((prev) => [...prev, { sender: 'bot', text: '...' }]); // Placeholder for bot message
+    setConversation((prev) => [...prev, { sender: 'bot', text: '...' }]);
 
     try {
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -60,65 +82,98 @@ const Chatbot = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status} - ${await response.text()}`);
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      if (!response.body) {
-        throw new Error('Response body is null');
-      }
+      if (response.body) {
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder('utf-8');
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder('utf-8');
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+          const chunk = decoder.decode(value, { stream: true });
+          const messages = chunk.split('\n').filter((line) => line.trim() !== '');
 
-        const chunk = decoder.decode(value, { stream: true });
-        const messages = chunk.split('\n').filter((line) => line.trim() !== '');
-
-        messages.forEach((msg) => {
-          if (msg.startsWith('data: ')) {
-            const data = msg.replace('data: ', '');
-            try {
-              const json = JSON.parse(data);
-              if (json.choices && json.choices[0].delta && json.choices[0].delta.content) { 
-                const content = json.choices[0].delta.content;
-                botMessage += content; // Append new content
-                // Update conversation with the latest bot message
-                setConversation((prev) => [
-                  ...prev.slice(0, -1), // Replace the placeholder message
-                  { sender: 'bot', text: botMessage }, // Update the message
-                ]);
+          messages.forEach((msg) => {
+            if (msg.startsWith('data: ')) {
+              const data = msg.replace('data: ', '');
+              try {
+                const json = JSON.parse(data);
+                if (json.choices && json.choices[0].delta && json.choices[0].delta.content) {
+                  botMessage += json.choices[0].delta.content;
+                  setConversation((prev) => [
+                    ...prev.slice(0, -1),
+                    { sender: 'bot', text: botMessage },
+                  ]);
+                }
+              } catch (error) {
+                console.error('Error parsing JSON:', error);
               }
-            } catch (error) {
-              console.error('Error parsing JSON:', error);
             }
-          }
-        });
+          });
+        }
+      } else {
+        setConversation((prev) => [...prev, { sender: 'bot', text: 'Sorry, I could not fetch the response at this time.' }]);
       }
     } catch (error) {
       console.error('Error fetching response:', error);
-      const errorMessage = {
-        sender: 'bot' as const,
-        text: 'Sorry, I could not fetch the response at this time.',
-      };
-      setConversation((prev) => [...prev, errorMessage]);
+      setConversation((prev) => [...prev, { sender: 'bot', text: 'Sorry, I could not fetch the response at this time.' }]);
     } finally {
-      setLoading(false); // Set loading state to false
+      setLoading(false);
     }
-
-    setQuestion('');
   };
 
-  const suggestedQuestions = [
-    'Where can I park at UW?',
-    'What are some A&H classes I can take?',
-    'How much is tuition this quarter?'
-  ];
+  const handleHardcodedResponse = async (question: string) => {
+    if (hardcodedStep === 0) {
+      setConversation((prev) => [
+        ...prev,
+        { sender: 'bot', text: 'How many credits are you taking?' },
+      ]);
+      setHardcodedStep(1);
+    } else if (hardcodedStep === 1) {
+      const credits = parseInt(question);
+      if (isNaN(credits) || credits < 1) {
+        setConversation((prev) => [
+          ...prev,
+          { sender: 'bot', text: 'Please enter a valid number of credits.' },
+        ]);
+        setLoading(false);
+        return;
+      }
+      setCredits(credits);
+      setConversation((prev) => [
+        ...prev,
+        { sender: 'bot', text: 'Are you an in-state resident? (yes/no)' },
+      ]);
+      setHardcodedStep(2);
+    } else if (hardcodedStep === 2) {
+      const resident = question.toLowerCase() === 'yes';
+      setIsResident(resident);
+      const tuition = calculateTuition(credits, resident);
+      setConversation((prev) => [
+        ...prev,
+        { sender: 'bot', text: `Your tuition is $${tuition.toLocaleString()}.` },
+      ]);
+      setHardcodedStep(0); // Reset for next question
+    }
 
-  const handleFeedback = (rating: number) => {
-    setFeedback(rating);
+    setLoading(false);
+  };
+
+  const calculateTuition = (credits: number, isResident: boolean): number => {
+    const tuitionRates = {
+      resident: [1040, 1471, 1888, 2305, 2722, 3139, 3556, 3973, 4390],
+      nonResident: [3076, 4500, 5924, 7348, 8772, 10196, 11620, 13044, 14468],
+    };
+    const rateArray = isResident ? tuitionRates.resident : tuitionRates.nonResident;
+    if (credits >= 10) return rateArray[8];
+    return rateArray[credits - 1];
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setQuestion(suggestion);
   };
 
   return (
@@ -128,37 +183,42 @@ const Chatbot = () => {
         <h1>UW ChatBot</h1>
       </div>
       <div className="chat-body">
-        {/* Chat history */}
         <div className="chat-history">
           {conversation.map((msg, idx) => (
             <div key={idx} className={`message ${msg.sender}`}>
               <p>{msg.text}</p>
             </div>
           ))}
-          <div ref={chatEndRef} /> {/* Scroll to end*/}
+          <div ref={chatEndRef} />
         </div>
 
-        {/* Input form */}
         <form className="chat-form" onSubmit={handleQuestionSubmit}>
           <input
             type="text"
             placeholder="Ask me anything about UW..."
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            disabled={loading} // Disable input while loading
+            disabled={loading}
           />
-          <button type="submit" disabled={loading}>➤</button> {/* Disable button while loading */}
+          <button type="submit" disabled={loading}>➤</button>
+          <button
+            className="toggle-chatgpt-button"
+            onClick={() => setUseChatGPT(!useChatGPT)}
+          >
+            {useChatGPT ? 'ChatGPT' : 'UW ChatBot'}
+          </button>
         </form>
 
-        {/* Suggested questions */}
         <div className="suggested-questions">
-          {suggestedQuestions.map((suggestion, idx) => (
-            <button key={idx} onClick={() => setQuestion(suggestion)}>
+          {suggestions.map((suggestion, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleSuggestionClick(suggestion)}
+            >
               {suggestion}
             </button>
           ))}
         </div>
-
         {/* Feedback section
         <div className="feedback-section">
           <p>Please give us feedback!</p>
