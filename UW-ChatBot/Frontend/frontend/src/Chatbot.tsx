@@ -2,6 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import './Chatbot.css';
 import logo from './photos/uwchatbotlogo.png';
 import axios from 'axios';
+import Modal from './Modal';
+
+type QualityData = {
+  accuracy: string | null;
+  completeness: string | null;
+  speed: string | null;
+  errorHandling: string | null;
+};
 
 type Message = {
   sender: "bot" | "user";
@@ -25,6 +33,13 @@ const Chatbot = () => {
     "What is the GPA requirement?",
     "Tell me about UW campus life.",
   ]);
+  const [qualityData, setQualityData] = useState<QualityData>({
+    accuracy: '80%',
+    completeness: '100%',
+    speed: '2.868s',
+    errorHandling: '60%',
+  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
@@ -176,6 +191,22 @@ const Chatbot = () => {
     setQuestion(suggestion);
   };
 
+  const fetchQualityData = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/sheet-data');
+      setQualityData(response.data);
+    } catch (error) {
+      console.error('Error fetching quality data:', error);
+    }
+  };
+
+  const openModal = () => {
+    fetchQualityData();
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => setIsModalOpen(false);
+
   return (
     <div className="chatbot-container">
       <div className="chat-header">
@@ -235,6 +266,19 @@ const Chatbot = () => {
           </div>
         </div> */}
       </div>
+      <button className="quality-button" onClick={openModal}>
+        View Quality Metrics
+      </button>
+
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <h2>Chatbot Quality Metrics</h2>
+        <ul>
+          <li><strong>Accuracy:</strong> {qualityData.accuracy || 'N/A'}</li>
+          <li><strong>Completeness:</strong> {qualityData.completeness || 'N/A'}</li>
+          <li><strong>Speed:</strong> {qualityData.speed || 'N/A'}</li>
+          <li><strong>Error Handling:</strong> {qualityData.errorHandling || 'N/A'}</li>
+        </ul>
+      </Modal>
     </div>
   );
 };
