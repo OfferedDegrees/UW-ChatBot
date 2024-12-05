@@ -151,6 +151,23 @@
   transform: translateY(0); /* Button sinks on click */
 }
 
+.quality-button {
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #3e1f61;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+}
+
+.quality-button:hover {
+  transform: translateY(-2px);
+}
+
+
 /* Responsive adjustments */
 @media (max-width: 600px) {
   .chat-header h1 {
