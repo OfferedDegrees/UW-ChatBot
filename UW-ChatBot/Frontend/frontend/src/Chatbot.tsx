@@ -41,6 +41,11 @@ const Chatbot = () => {
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // drop down model selection
+  const [dropdownOpen, setDropdownOpen] = useState(false); // Controls the dropdown menu visibility
+  const [selectedModel, setSelectedModel] = useState('ChatGPT'); // Tracks the selected model
+
+
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
 
@@ -212,6 +217,19 @@ const Chatbot = () => {
       <div className="chat-header">
         <img src={logo} alt="ChatBot Logo" className="chat-logo" />
         <h1>UW ChatBot</h1>
+        <button className="quality-button" onClick={openModal}>
+        View Quality Metrics
+      </button>
+
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <h2>Chatbot Quality Metrics</h2>
+        <ul>
+          <li><strong>Accuracy:</strong> {qualityData.accuracy || 'N/A'}</li>
+          <li><strong>Completeness:</strong> {qualityData.completeness || 'N/A'}</li>
+          <li><strong>Speed:</strong> {qualityData.speed || 'N/A'}</li>
+          <li><strong>Error Handling:</strong> {qualityData.errorHandling || 'N/A'}</li>
+        </ul>
+      </Modal>
       </div>
       <div className="chat-body">
         <div className="chat-history">
@@ -266,19 +284,6 @@ const Chatbot = () => {
           </div>
         </div> */}
       </div>
-      <button className="quality-button" onClick={openModal}>
-        View Quality Metrics
-      </button>
-
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <h2>Chatbot Quality Metrics</h2>
-        <ul>
-          <li><strong>Accuracy:</strong> {qualityData.accuracy || 'N/A'}</li>
-          <li><strong>Completeness:</strong> {qualityData.completeness || 'N/A'}</li>
-          <li><strong>Speed:</strong> {qualityData.speed || 'N/A'}</li>
-          <li><strong>Error Handling:</strong> {qualityData.errorHandling || 'N/A'}</li>
-        </ul>
-      </Modal>
     </div>
   );
 };

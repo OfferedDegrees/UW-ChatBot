@@ -19,6 +19,7 @@
     max-width: 500px;
     position: relative;
     text-align: center;
+    color: black;
   }
   
   .modal-close {
