@@ -37,9 +37,14 @@ If there is an issue, then run this:
 npm install --legacy-peer-deps
 ```
 
-Then run this:
+To run the program, run this command:
 ```bash
 npm run start
+```
+
+To close the program:
+```bash
+[ctrl][c]
 ```
 
 # The Layout of Our Directory Structure

@@ -3,9 +3,10 @@
 
 # UW-ChatBot
 
-UW ChatBot is a 24/7 web-based chat interface designed to help users find information about the University of Washington quickly and efficiently. Users can ask questions related to programs, departments, registration, deadlines, and various other university-specific details. The chatbot provides direct responses, often accompanied by relevant follow-up questions for greater context. This system eliminates the need for navigating multiple web pages on the UW website and serves as a convenient tool for prospective and current students, parents, and university staff.
+UW ChatBot is a 24/7 web-based chat interface designed to help users find information about the University of Washington quickly and efficiently. Users can ask questions related to programs, departments, registration, deadlines, and various other university-specific details. This system eliminates the need for navigating multiple web pages on the UW website and serves as a convenient tool for prospective and current students, parents, and university staff.
 
 Access UW Chatbot at [UW CHATBOT!](https://github.com/RyanLe101/UW-ChatBot).
+Access our [document](https://docs.google.com/document/d/1Wk5AjDGunrYvGIRVNpQ3cEXGVCDPUu2s6U9ga28QSeY/edit?usp=sharing).
 
 ## How to Use the Chatbot
 
