@@ -1,31 +1,84 @@
 # Getting Started with Create React App
 
-
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+# How to obtain the source code
+To obtain the source code, run this command in the directory of your choice:
+
+```bash
+git clone https://github.com/RyanLe101/UW-ChatBot.git
+```
+
+```bash
+cd UW-Chatbot
+```
 
 # Installations Before Running Everything
 Install [Node.js](https://nodejs.org/en)
 
-Open terminal and run:
-
-```bash
-node -v
-```
-
-```bash
-npm -v
-```
-
-Setup the API Key (kind of broken right now and the key is hardcoded right now in the `Chatbot.tsx` file)
-- go to your `./frontend/src/ directory` and create a `.env` file.
+Setup the API Key:
+- go to your `UW-Chatbot/Frontend/frontend/src/` directory and create a `.env` file.
 - add your OpenAI API key to the `.env` file:
 
 ```bash
 REACT_APP_OPENAI_API_KEY=your_api_key
 ```
 
-## Available Scripts
+# How to Run the Program itself:
+Go to the directory `UW-ChatBot\UW-Chatbot\Frontend\frontend`.
 
+Open terminal (or whatever you use to run commands) and run this command:
+```bash
+npm install
+```
+
+If there is an issue, then run this:
+```bash
+npm install --legacy-peer-deps
+```
+
+Then run this:
+```bash
+npm run start
+```
+
+# The Layout of Our Directory Structure
+The layout of the directory is in the src:
+- `UW-Chatbot/Frontend/frontend/frontend/src/__test__`: Contains the test files.
+- `src`: Contains the frontend code, including `.tsx` files for rendering the components and `.css` files for customizing the website's styling after rendering.
+
+# How to Build the Software
+To build the software, run this command in the terminal:
+
+```bash
+npm run build
+```
+
+This will output to the build directory.
+
+# How to Test the Software
+- Test files are located in the `./frontend/src/__tests__` directory.
+
+- Each test file should be named with the `.test.tsx` extension/ ending.
+- Example: `[componentName].test.tsx`
+
+- The names of the tests should describe what is being tested
+
+- To test the software, run this command in the terminal:
+```bash
+npm test
+```
+
+# How to Build a Release of the Software
+- To build a release of the software:
+```bash
+npm run build
+```
+
+This will output to the `build` directory
+
+
+## Available Scripts
 
 In the project directory, you can run:
 
@@ -87,52 +140,6 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-# How to obtain the source code
-To obtain the source code, run this command in the directory of your choice:
-
-```bash
-git clone https://github.com/RyanLe101/UW-ChatBot.git
-```
-
-```bash
-cd UW-Chatbot
-```
-
-# The layout of your directory structure
-The layout of the directory is in the src:
-- `frontend/src/__test__`: Contains the test files.
-- `src`: Contains the frontend code, including `.tsx` files for rendering the components and `.css` files for customizing the website's styling after rendering.
-
-# How to build the software
-To build the software, run this command in the terminal:
-
-```bash
-npm run build
-```
-
-This will output to the build directory.
-
-# How to test the software
-- Test files are located in the `./frontend/src/__tests__` directory.
-
-- Each test file should be named with the `.test.tsx` extension/ ending.
-- Example: `[componentName].test.tsx`
-
-- The names of the tests should describe what is being tested
-
-- To test the software, run this command in the terminal:
-```bash
-npm test
-```
-
-# How to build a release of the software
-- To build a release of the software:
-```bash
-npm run build
-```
-
-This will output to the `build` directory
 
 ## Learn More
 
