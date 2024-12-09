@@ -10,12 +10,9 @@ Access our [document](https://docs.google.com/document/d/1Wk5AjDGunrYvGIRVNpQ3cE
 
 ## How to Use the Chatbot
 
-> **Note:** The below functionality is a work in progress, as our fine-tuned model isn’t connected to our chatbot yet.
-
 1. **Access the chat interface** by opening a web browser and navigating to the UW Chatbot URL.
 2. On the main page, you will see the chat interface. **Click the input field** and type in a question you have about UW.
 3. **Press the send button** to submit your question, and the chatbot will reply with a response.
-4. **Provide clarifying information** if necessary and answer any follow-up questions from the chatbot to receive a more accurate and personalized response.
 
 ---
 
