@@ -13,14 +13,13 @@ type QualityData = {
 
 type Message = {
   sender: "bot" | "user";
-  text: string;
+  text: string | JSX.Element;
 };
 
 const Chatbot = () => {
   const [question, setQuestion] = useState('');
   const [conversation, setConversation] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
-  const [useChatGPT, setUseChatGPT] = useState(true);
   const [hardcodedStep, setHardcodedStep] = useState(0); // Track the step of the conversation
   const [credits, setCredits] = useState(0); // Store the number of credits
   const [isResident, setIsResident] = useState(false); // Store if the student is an in-state resident
@@ -41,13 +40,14 @@ const Chatbot = () => {
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // drop down model selection
-  const [dropdownOpen, setDropdownOpen] = useState(false); // Controls the dropdown menu visibility
-  const [selectedModel, setSelectedModel] = useState('ChatGPT'); // Tracks the selected model
-
-
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+
+
+  const [selectedModel, setSelectedModel] = useState<'ChatGPT' | 'Hardcoded' | 'AWS'>('ChatGPT');
+
+  const [isEndClicked, setIsEndClicked] = useState(false);
+
 
   useEffect(() => {
     setConversation([{ sender: 'bot', text: 'Woof woof! 🐾 I know all about UW' }]);
@@ -57,31 +57,68 @@ const Chatbot = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [conversation]);
 
+  const handleFeedbackSubmit = () => {
+    setConversation((prev) => [
+      ...prev,
+      {
+        sender: 'bot',
+        text: (
+          <>
+            <a href="https://forms.gle/9YrmNPymBuae973P8" target="_blank" rel="noopener noreferrer">
+              Please rate your experience! 
+            </a> {' '}
+            We would love to hear your feedback! ❤️
+          </>
+        ),
+      },
+    ]);
+    handleEndButton();
+  };
+
   const handleQuestionSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (question.trim() === '' || loading) return;
-
+  
     const userMessage: Message = { sender: 'user', text: question };
     setConversation((prev) => [...prev, userMessage]);
     setLoading(true);
-
-    if (useChatGPT) {
+  
+    if (selectedModel === 'ChatGPT') {
       await fetchChatGPTResponse(question);
-    } else {
+    } else if (selectedModel === 'Hardcoded') {
       await handleHardcodedResponse(question);
+    } else if (selectedModel === 'AWS') {
+      await fetchAWSResponse();
     }
-
+  
     setQuestion('');
   };
 
+  const handleEndButton = () => {
+    setIsEndClicked(true); // Mark conversation as ended
+  };
+  
+
   const fetchAWSResponse = async () => {
     try {
-      const res = await axios.post('http://localhost:5000/generate-response', { inputText });
-      setResponseText(res.data.response);
+      const res = await axios.post('http://localhost:5000/generate-response', { inputText: question });
+      const botMessage = res.data.response;
+  
+      setConversation((prev) => [
+        ...prev,
+        { sender: 'bot', text: botMessage },
+      ]);
     } catch (error) {
       console.error('Error fetching response:', error);
+      setConversation((prev) => [
+        ...prev,
+        { sender: 'bot', text: 'Sorry, I could not fetch the response at this time.' },
+      ]);
+    } finally {
+      setLoading(false);
     }
   };
+  
 
   const fetchChatGPTResponse = async (question: string) => {
     let botMessage = '';
@@ -176,7 +213,7 @@ const Chatbot = () => {
         ...prev,
         { sender: 'bot', text: `Your tuition is $${tuition.toLocaleString()}.` },
       ]);
-      setHardcodedStep(0); // Reset for next question
+      setHardcodedStep(0);
     }
 
     setLoading(false);
@@ -193,6 +230,7 @@ const Chatbot = () => {
   };
 
   const handleSuggestionClick = (suggestion: string) => {
+    if(loading) return;
     setQuestion(suggestion);
   };
 
@@ -247,14 +285,22 @@ const Chatbot = () => {
             placeholder="Ask me anything about UW..."
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            disabled={loading}
+            disabled={loading||isEndClicked}
           />
-          <button type="submit" disabled={loading}>➤</button>
-          <button
-            className="toggle-chatgpt-button"
-            onClick={() => setUseChatGPT(!useChatGPT)}
+          <button type="submit" disabled={loading || isEndClicked}>➤</button>
+          <select
+            value={selectedModel}
+            onChange={(e) => setSelectedModel(e.target.value as 'ChatGPT' | 'Hardcoded' | 'AWS')}
+            className="model-select-dropdown"
+            disabled={loading || isEndClicked}
           >
-            {useChatGPT ? 'ChatGPT' : 'UW ChatBot'}
+            <option value="ChatGPT">ChatGPT</option>
+            <option value="Hardcoded">UW ChatBot</option>
+            <option value="AWS">AWS Model</option>
+          </select>
+
+          <button onClick={handleFeedbackSubmit} disabled={isEndClicked}>
+            End
           </button>
         </form>
 
@@ -263,26 +309,12 @@ const Chatbot = () => {
             <button
               key={idx}
               onClick={() => handleSuggestionClick(suggestion)}
+              disabled={loading|| isEndClicked}
             >
               {suggestion}
             </button>
           ))}
         </div>
-        {/* Feedback section
-        <div className="feedback-section">
-          <p>Please give us feedback!</p>
-          <div className="stars">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <span
-                key={star}
-                className={`star ${feedback >= star ? 'selected' : ''}`}
-                onClick={() => handleFeedback(star)}
-              >
-                ★
-              </span>
-            ))}
-          </div>
-        </div> */}
       </div>
     </div>
   );

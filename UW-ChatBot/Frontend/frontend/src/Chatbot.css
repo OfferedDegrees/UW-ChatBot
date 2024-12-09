@@ -120,6 +120,30 @@
   transform: none; /* Prevent lift on disabled button */
 }
 
+.chat-form select {
+  background-color: #4b2e83;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin: 1px;
+}
+
+.chat-form select:hover {
+  background-color: #3e1f61;
+  transform: translateY(-2px); /* Slight lift on hover */
+}
+
+.chat-form select:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none; /* Prevent lift on disabled dropdown */
+}
+
+
 /* Suggested questions section */
 .suggested-questions {
   display: flex;
