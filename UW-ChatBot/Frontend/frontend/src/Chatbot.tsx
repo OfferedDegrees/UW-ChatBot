@@ -17,21 +17,31 @@ type Message = {
 };
 
 const Chatbot = () => {
-  const [question, setQuestion] = useState('');
-  const [conversation, setConversation] = useState<Message[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [hardcodedStep, setHardcodedStep] = useState(0); // Track the step of the conversation
-  const [credits, setCredits] = useState(0); // Store the number of credits
-  const [isResident, setIsResident] = useState(false); // Store if the student is an in-state resident
+  // state variables to set the states of the chatbot
+
+  // chatbot conversations
+  const [question, setQuestion] = useState(''); // user input for questions
+  const [conversation, setConversation] = useState<Message[]>([]); // store the conversations
+  const [loading, setLoading] = useState(false); // track the loading state
+
+  // hardcoded
+  const [hardcodedStep, setHardcodedStep] = useState(0); 
+  const [credits, setCredits] = useState(0); 
+  const [isResident, setIsResident] = useState(false);
+
   // aws
   const [inputText, setInputText] = useState('');
   const [responseText, setResponseText] = useState('');
+
+  // suggestion questions
   const [suggestions] = useState([
     "What are the tuition fees?",
     "How many credits do I need?",
     "What is the GPA requirement?",
     "Tell me about UW campus life.",
   ]);
+
+  // quality metrics for users
   const [qualityData, setQualityData] = useState<QualityData>({
     accuracy: '80%',
     completeness: '100%',
@@ -43,20 +53,23 @@ const Chatbot = () => {
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
 
+  // selecting different models for dropdown
+  const [selectedModel, setSelectedModel] = useState<'ChatGPT' | 'Hardcoded' | 'AWS'>('AWS');
 
-  const [selectedModel, setSelectedModel] = useState<'ChatGPT' | 'Hardcoded' | 'AWS'>('ChatGPT');
-
+  // flag for ending the conversation
   const [isEndClicked, setIsEndClicked] = useState(false);
 
-
+  // beginning of the conversation
   useEffect(() => {
     setConversation([{ sender: 'bot', text: 'Woof woof! 🐾 I know all about UW' }]);
   }, []);
 
+  // autoscroll down to the latest message
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [conversation]);
 
+  // handle the feedback submit
   const handleFeedbackSubmit = () => {
     setConversation((prev) => [
       ...prev,
@@ -75,6 +88,7 @@ const Chatbot = () => {
     handleEndButton();
   };
 
+  // handle the questions entered by the user
   const handleQuestionSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (question.trim() === '' || loading) return;
@@ -88,26 +102,37 @@ const Chatbot = () => {
     } else if (selectedModel === 'Hardcoded') {
       await handleHardcodedResponse(question);
     } else if (selectedModel === 'AWS') {
-      await fetchAWSResponse();
+      await fetchAWSResponse(question);
     }
   
     setQuestion('');
   };
 
+  // handle the end button and its state
   const handleEndButton = () => {
-    setIsEndClicked(true); // Mark conversation as ended
+    setIsEndClicked(true);
   };
   
+  // fetch the response from the AWS
+  const fetchAWSResponse = async (question: string) => {
+    console.log('fetchAWSResponse called with question:', question); // Debug log
 
-  const fetchAWSResponse = async () => {
     try {
-      const res = await axios.post('http://localhost:5000/generate-response', { inputText: question });
-      const botMessage = res.data.response;
-  
-      setConversation((prev) => [
-        ...prev,
-        { sender: 'bot', text: botMessage },
-      ]);
+      const res = await axios.post('http://localhost:5000/generate-response', { inputText: question }, {
+        withCredentials: true, // Include credentials if using sessions
+      });
+      console.log('Received response:', res.data.response); // Debug log
+
+      if (res.data.response) {
+        setConversation((prev) => [...prev, { sender: 'bot', text: res.data.response }]);
+        console.log('Bot response added to conversation.');
+      } else {
+        console.warn('No response field in the backend response.');
+        setConversation((prev) => [
+          ...prev,
+          { sender: 'bot', text: 'Sorry, I could not fetch the response at this time.' },
+        ]);
+      }
     } catch (error) {
       console.error('Error fetching response:', error);
       setConversation((prev) => [
@@ -115,11 +140,12 @@ const Chatbot = () => {
         { sender: 'bot', text: 'Sorry, I could not fetch the response at this time.' },
       ]);
     } finally {
+      console.log('fetchAWSResponse completed. Setting loading to false.');
       setLoading(false);
     }
   };
   
-
+  // fetch the response from the ChatGPT
   const fetchChatGPTResponse = async (question: string) => {
     let botMessage = '';
     setConversation((prev) => [...prev, { sender: 'bot', text: '...' }]);
@@ -182,6 +208,7 @@ const Chatbot = () => {
     }
   };
 
+  // handle the hardcoded/ beta responses
   const handleHardcodedResponse = async (question: string) => {
     if (hardcodedStep === 0) {
       setConversation((prev) => [
@@ -219,6 +246,7 @@ const Chatbot = () => {
     setLoading(false);
   };
 
+  // calculate the tuition based on the credits and residency
   const calculateTuition = (credits: number, isResident: boolean): number => {
     const tuitionRates = {
       resident: [1040, 1471, 1888, 2305, 2722, 3139, 3556, 3973, 4390],
@@ -229,11 +257,13 @@ const Chatbot = () => {
     return rateArray[credits - 1];
   };
 
+  // handle the suggestion click
   const handleSuggestionClick = (suggestion: string) => {
     if(loading) return;
     setQuestion(suggestion);
   };
 
+  // gets the quality data from the backend
   const fetchQualityData = async () => {
     try {
       const response = await axios.get('http://localhost:5000/api/sheet-data');
@@ -243,6 +273,7 @@ const Chatbot = () => {
     }
   };
 
+  // open and close the modal
   const openModal = () => {
     fetchQualityData();
     setIsModalOpen(true);
@@ -250,6 +281,7 @@ const Chatbot = () => {
 
   const closeModal = () => setIsModalOpen(false);
 
+  // render the chatbot component
   return (
     <div className="chatbot-container">
       <div className="chat-header">
@@ -294,9 +326,10 @@ const Chatbot = () => {
             className="model-select-dropdown"
             disabled={loading || isEndClicked}
           >
+            <option value="AWS">UW ChatBot</option>
             <option value="ChatGPT">ChatGPT</option>
-            <option value="Hardcoded">UW ChatBot</option>
-            <option value="AWS">AWS Model</option>
+            <option value="Hardcoded">Beta</option>
+            
           </select>
 
           <button onClick={handleFeedbackSubmit} disabled={isEndClicked}>

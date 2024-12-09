@@ -25,7 +25,7 @@ REACT_APP_OPENAI_API_KEY=your_api_key
 ```
 
 # How to Run the Program itself:
-Go to the directory `UW-ChatBot\UW-Chatbot\Frontend\frontend`.
+Go to the directory `UW-ChatBot\UW-Chatbot\Frontend\frontend` and open another terminal and go to the directory `UW-ChatBot\UW-Chatbot\Frontend\backend`
 
 Open terminal (or whatever you use to run commands) and run this command:
 ```bash
@@ -37,9 +37,14 @@ If there is an issue, then run this:
 npm install --legacy-peer-deps
 ```
 
-To run the program, run this command:
+To run the frontend, run this command:
 ```bash
 npm run start
+```
+
+To run the backend, run this command:
+```bash
+node .\server.js
 ```
 
 To close the program:
