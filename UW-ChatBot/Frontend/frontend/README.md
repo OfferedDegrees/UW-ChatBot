@@ -17,11 +17,31 @@ cd UW-Chatbot
 Install [Node.js](https://nodejs.org/en)
 
 Setup the API Key:
-- go to your `UW-Chatbot/Frontend/frontend/src/` directory and create a `.env` file.
+- go to your `UW-Chatbot/Frontend/frontend/` directory and create a `.env` file.
 - add your OpenAI API key to the `.env` file:
 
 ```bash
 REACT_APP_OPENAI_API_KEY=your_api_key
+```
+- same with the frontend, but on the backend `UW-Chatbot/Frontend/backend/` directory and create a `.env` file.
+- add your AWS keys to the `.env` files:
+
+```bash
+AWS_ACCESS_KEY=your_access_key
+AWS_SECRET_KEY=your_secret_key
+AWS_REGION=us-east-1
+KNOWLEDGE_BASE_ID=your_knowledge_base_id
+BEDROCK_MODEL_ARN=your_bedrock_model_arn
+KMS_KEY_ARN=your_kms_key_arn
+IMPLICIT_FILTER_MODEL_ARN=your_implicit_filter_model_arn
+RERANKING_MODEL_ARN=your_reranking_model_arn
+GUARDRAIL_ID=your_guardrail_id
+GUARDRAIL_VERSION=your_guardrail_version
+PINECONE_CONNECTION_STRING=your_pinecone_connection_string
+PINECONE_CREDENTIALS_SECRET_ARN=your_pinecone_credentials_secret_arn
+S3_BUCKET_NAME=your_bucket_name
+S3_FILE_PATH=your_s3_file_path
+PORT=5000
 ```
 
 # How to Run the Program itself:
