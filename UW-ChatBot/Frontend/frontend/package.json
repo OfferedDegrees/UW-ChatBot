@@ -20,7 +20,9 @@
     "start": "serve -s build",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "devServer": {
     "allowedHosts": [
@@ -48,5 +50,11 @@
   },
   "browser": {
     "crypto": false
-  }
+  },
+  "devDependencies": {
+    "gh-pages": "^6.2.0"
+  },
+  "homepage": "https://RyanLe101.github.io/UW-ChatBot/"
 }
+
+
