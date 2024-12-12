@@ -175,6 +175,32 @@
   transform: translateY(0); /* Button sinks on click */
 }
 
+.payment-photo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.donate-button {
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #3e1f61;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+  margin-left: 1035px;
+  font-family: Arial, sans-serif;
+}
+
+.donate-button:hover {
+  background-color: #2d144a;
+  transform: translateY(-2px);
+}
+
 .quality-button {
   margin: 20px auto;
   padding: 10px 20px;
@@ -190,6 +216,7 @@
 }
 
 .quality-button:hover {
+  background-color: #2d144a;
   transform: translateY(-2px);
 }
 

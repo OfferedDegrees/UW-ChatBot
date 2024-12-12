@@ -3,6 +3,7 @@ import './Chatbot.css';
 import logo from './photos/uwchatbotlogo.png';
 import axios from 'axios';
 import Modal from './Modal';
+import payment from './payment.png';
 
 type QualityData = {
   accuracy: string | null;
@@ -49,6 +50,7 @@ const Chatbot = () => {
     errorHandling: '60%',
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDonateOpen, setDonateOpen] = useState(false);
 
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
@@ -116,6 +118,7 @@ const Chatbot = () => {
   // fetch the response from the AWS
   const fetchAWSResponse = async (question: string) => {
     console.log('fetchAWSResponse called with question:', question); // Debug log
+    setConversation((prev) => [...prev, { sender: 'bot', text: '...' }]);
 
     try {
       const res = await axios.post('http://localhost:5000/generate-response', { inputText: question }, {
@@ -124,7 +127,7 @@ const Chatbot = () => {
       console.log('Received response:', res.data.response); // Debug log
 
       if (res.data.response) {
-        setConversation((prev) => [...prev, { sender: 'bot', text: res.data.response }]);
+        setConversation((prev) => [...prev.slice(0,-1), { sender: 'bot', text: res.data.response }]);
         console.log('Bot response added to conversation.');
       } else {
         console.warn('No response field in the backend response.');
@@ -279,7 +282,12 @@ const Chatbot = () => {
     setIsModalOpen(true);
   };
 
+  const openDonate = () => {
+    setDonateOpen(true);
+  };
+
   const closeModal = () => setIsModalOpen(false);
+  const closeDonate = () => setDonateOpen(false);
 
   // render the chatbot component
   return (
@@ -287,9 +295,17 @@ const Chatbot = () => {
       <div className="chat-header">
         <img src={logo} alt="ChatBot Logo" className="chat-logo" />
         <h1>UW ChatBot</h1>
+        <button className="donate-button" onClick={openDonate}>
+          Donate
+        </button>
         <button className="quality-button" onClick={openModal}>
         View Quality Metrics
       </button>
+
+      <Modal isOpen={isDonateOpen} onClose={closeDonate}>
+        <h2>Please donate to us 😭</h2>
+        <img className="payment-photo" src={payment} alt="Donation image" />
+      </Modal>
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <h2>Chatbot Quality Metrics</h2>
