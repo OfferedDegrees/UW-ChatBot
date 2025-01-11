@@ -15,6 +15,10 @@ Access our [document](https://docs.google.com/document/d/1Wk5AjDGunrYvGIRVNpQ3cE
 2. On the main page, you will see the chat interface. **Click the input field** and type in a question you have about UW.
 3. **Press the send button** to submit your question, and the chatbot will reply with a response.
 
+#Architecture
+![image](https://github.com/user-attachments/assets/f1b776a1-e5a9-44ca-bf26-1e24e5335d7e)
+
+
 ---
 
 ## Local Installation & Setup
