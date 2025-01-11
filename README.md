@@ -1,5 +1,6 @@
 ![Backend Status](https://github.com/RyanLe101/UW-ChatBot/actions/workflows/ci.yml/badge.svg)
 
+# This Project is Now Deprecated (1/1/25)
 
 # UW-ChatBot
 
@@ -10,7 +11,7 @@ Access our [document](https://docs.google.com/document/d/1Wk5AjDGunrYvGIRVNpQ3cE
 
 ## How to Use the Chatbot
 
-1. **Access the chat interface** by opening a web browser and navigating to the UW Chatbot URL.
+1. **Access the chat interface** by opening a web browser and navigatings to the UW Chatbot URL.
 2. On the main page, you will see the chat interface. **Click the input field** and type in a question you have about UW.
 3. **Press the send button** to submit your question, and the chatbot will reply with a response.
 
